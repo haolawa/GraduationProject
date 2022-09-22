@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.MineFragment">
+
+    <com.example.graduationproject.utils.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+    <!-- TODO: Update blank fragment layout -->
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="120dp"
+       android:layout_marginTop="100dp"
+       android:gravity="center"
+       android:orientation="vertical"
+       >
+       <ImageView
+
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/img_avatar"
+           android:src="@mipmap/logo"
+
+           />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="haolawa"
+           android:id="@+id/tv_username"
+           android:layout_marginTop="10dp"
+           android:textSize="25sp"
+           android:textAlignment="center"
+           />
+   </LinearLayout>
+
+    <com.lihang.ShadowLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:hl_cornerRadius="8dp"
+        app:hl_shadowColor="#14000000"
+        app:hl_shadowLimit="8dp"
+        app:hl_shadowOffsetX="0dp"
+        app:hl_shadowOffsetY="2dp">
+
+        <LinearLayout
+            android:id="@+id/ll_version"
+            android:layout_width="335dp"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="版本更新"
+                android:textColor="#ff000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0.66"
+                android:gravity="end"
+                android:text="已经是最新版本"
+                android:textColor="#ff000000"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="9dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/arr_right" />
+        </LinearLayout>
+    </com.lihang.ShadowLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="460dp"
+        >
+        <Button
+            android:id="@+id/btn_out_login"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            style="@style/btn"
+            android:text="退出登录"
+
+
+            />
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.lihang.ShadowLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:clickable="false"
+        app:hl_cornerRadius="8dp"
+        app:hl_shadowColor="#14000000"
+        app:hl_shadowLimit="8dp"
+        app:hl_shadowOffsetX="0dp"
+        app:hl_shadowOffsetY="2dp">
+
+        <RelativeLayout
+            android:layout_width="335dp"
+            android:layout_height="104dp"
+            android:padding="12dp">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_film"
+                android:layout_width="70dp"
+                android:layout_height="110dp"
+                android:layout_centerVertical="true" />
+<!--                app:failureImage="@drawable/bg_gray_circle"-->
+<!--                app:placeholderImage="@drawable/bg_gray_circle"-->
+
+
+            <TextView
+                android:id="@+id/tv_film_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@id/img_film"
+                android:text="haolawa"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:maxWidth="190dp"
+                android:textColor="#ff000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_film_name"
+                android:layout_alignLeft="@id/tv_film_name"
+                android:layout_marginTop="9dp"
+                android:alpha="0.66"
+                android:text="导演:"
+                android:textColor="#ff000000"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_perform_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_below="@id/tv_film_name"
+                android:layout_alignLeft="@id/tv_film_name"
+                android:layout_marginTop="9dp"
+                android:alpha="0.66"
+                android:text=""
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:maxWidth="100dp"
+                android:textColor="#ff000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_film_name"
+                android:layout_alignParentBottom="true"
+                android:text="时间:"
+                android:textColor="#ff000000"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_film_name"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="40dp"
+                android:textColor="#ffff3d4c"
+                android:text="时间"
+                android:textSize="14sp" />
+
+
+            <ImageView
+                android:id="@+id/img_collect"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:background="@mipmap/unlove"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/img_watch"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:background="@mipmap/unwatch"
+
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+    </com.lihang.ShadowLayout>
+
+</LinearLayout>
