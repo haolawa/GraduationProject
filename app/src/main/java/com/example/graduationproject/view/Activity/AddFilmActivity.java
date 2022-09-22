@@ -112,7 +112,7 @@ public class AddFilmActivity extends BaseActivity implements View.OnClickListene
     private String path;
 
 
-
+   //测试
     @Override
     protected int getLayoutId() {
         return R.layout.activity_add_film;
