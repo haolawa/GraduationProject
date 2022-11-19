@@ -186,6 +186,8 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                 deleteFilm();
                 ToastShow("删除成功");
                 break;
+            default:
+                break;
 
         }
     }
@@ -222,30 +224,27 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
         return true;
     }
     private void upDataFilm(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                FilmSaveBean filmSaveBean = new FilmSaveBean();
-                filmSaveBean.setUid(filmBean.getUid());
-                filmSaveBean.setFilmName(etFilmName.getText().toString());
-                if(!StringUtils.isEmpty(path)){
-                    filmSaveBean.setFilmImg(path);
-                }
-
-                filmSaveBean.setFilmDetail(etFilmDetail.getText().toString());
-                filmSaveBean.setFilmNote(etReview.getText().toString());
-                filmSaveBean.setFilmDirectors(etDirector.getText().toString());
-                filmSaveBean.setFilmTime(tvFilmTime.getText().toString());
-                filmSaveBean.setFilmPerformer(etPerformer.getText().toString());
-                filmSaveBean.setFilmType(etFilmStyle.getText().toString());
-                filmSaveBean.setLove(isImgLove);
-                filmSaveBean.setWatch(isImgWatch);
-
-                // filmDao.deleteAll();
-                filmDao.upData(filmSaveBean);
+        new Thread(() -> {
+            AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
+            FilmDao filmDao = db.filmDao();
+            FilmSaveBean filmSaveBean = new FilmSaveBean();
+            filmSaveBean.setUid(filmBean.getUid());
+            filmSaveBean.setFilmName(etFilmName.getText().toString());
+            if(!StringUtils.isEmpty(path)){
+                filmSaveBean.setFilmImg(path);
             }
+
+            filmSaveBean.setFilmDetail(etFilmDetail.getText().toString());
+            filmSaveBean.setFilmNote(etReview.getText().toString());
+            filmSaveBean.setFilmDirectors(etDirector.getText().toString());
+            filmSaveBean.setFilmTime(tvFilmTime.getText().toString());
+            filmSaveBean.setFilmPerformer(etPerformer.getText().toString());
+            filmSaveBean.setFilmType(etFilmStyle.getText().toString());
+            filmSaveBean.setLove(isImgLove);
+            filmSaveBean.setWatch(isImgWatch);
+
+            // filmDao.deleteAll();
+            filmDao.upData(filmSaveBean);
         }).start();
     }
     //改变按钮背景

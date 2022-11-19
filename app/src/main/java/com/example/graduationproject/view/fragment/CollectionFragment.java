@@ -27,6 +27,7 @@ import com.example.graduationproject.base.BaseFragment;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
 import com.example.graduationproject.model.FilmSaveBean;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.FilmDetailActivity;
 import com.example.graduationproject.view.Activity.WatchActivity;
@@ -43,10 +44,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class CollectionFragment extends Fragment implements View.OnClickListener {
+public class CollectionFragment extends BaseFragment{
     @BindView(R.id.title_bar)
     TitleBar titleBar;
-
     @BindView(R.id.et_search)
     EditText etSearch;
     @BindView(R.id.img_search)
@@ -55,96 +55,45 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     RecyclerView recycleView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout smartRefreshLayout;
-
     private List<FilmSaveBean> filmBeanList = new ArrayList<>();
     private FilmSaveAdapter adapter;
-    private View rootView;
-    private Unbinder unbinder;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_collection, container, false);
-
-        }
-        unbinder = ButterKnife.bind(this, rootView);
-        initView();
-        return rootView;
-
-
-    }
-
-    private void initView() {
-        //titleBar = rootView.findViewById(R.id.title_bar);
+    protected void initView(Bundle bundle) {
         titleBar.setTitle("收藏");
-        initList();
         initAdapter();
+        ThreadUtils.filmList(getActivity().getApplicationContext(),filmBeanList,adapter,ThreadUtils.isLove);
+        imgSearch.setOnClickListener(v -> {
+            // TODO: 2022/11/19 点击事件
+        });
     }
-    private void initList(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                List<FilmSaveBean> filmList = new ArrayList<>();
-                filmList = filmDao.getLove(true);
-                filmBeanList.clear();
-                filmBeanList.addAll(filmList);
 
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    adapter.notifyDataSetChanged();
-                });
-
-
-            }
-        }).start();
+    @Override
+    protected void initData() {
 
     }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.layout_film_list;
+    }
+
     private void initAdapter() {
-        filmBeanList = new ArrayList<>();
-
         adapter = new FilmSaveAdapter(R.layout.item_film_list, filmBeanList);
         recycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycleView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Intent intent = new Intent(getActivity(), FilmDetailActivity.class);
-                intent.putExtra("uid",filmBeanList.get(position).getUid());
-                startActivity(intent);
-
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(getActivity(), FilmDetailActivity.class);
+            intent.putExtra("uid",filmBeanList.get(position).getUid());
+            startActivity(intent);
         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initList();
-    }
-
-    @OnClick({R.id.et_search, R.id.img_search, R.id.recycle_view})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.et_search:
-                break;
-            case R.id.img_search:
-                break;
-            case R.id.recycle_view:
-                break;
-            case R.id.refreshLayout:
-                break;
-        }
+        ThreadUtils.filmList(getActivity().getApplicationContext(),filmBeanList,adapter,ThreadUtils.isLove);
     }
 
 }

@@ -17,9 +17,9 @@ import androidx.room.Room;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.example.graduationproject.R;
+import com.example.graduationproject.base.BaseFragment;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
-import com.example.graduationproject.model.FilmSaveBean;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.AddFilmActivity;
 import com.example.graduationproject.view.Activity.UnWatchActivity;
@@ -31,7 +31,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.title_bar)
     TitleBar titleBar;
     @BindView(R.id.tv_film_count)
@@ -42,38 +42,25 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     LinearLayout llUnWatch;
     @BindView(R.id.btn_add)
     Button btnAdd;
-    private View rootView;
-    private Unbinder unbinder;
     private int count;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        }
-        unbinder = ButterKnife.bind(this, rootView);
-        initView();
-        return rootView;
-
-
-    }
-
-    private void initView() {
-        //titleBar = rootView.findViewById(R.id.title_bar);
+    protected void initView(Bundle bundle) {
         titleBar.setTitle("主页");
-
         getCount();
+    }
+
+    @Override
+    protected void initData() {
 
     }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_main;
+    }
+
 
     @Override
     public void onResume() {
@@ -81,24 +68,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         getCount();
     }
 
-    private void getCount(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                count = filmDao.getCount();
+    private void getCount() {
+        // TODO: 2022/11/19
+        new Thread(() -> {
+            AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "myfilm.db").build();
+            FilmDao filmDao = db.filmDao();
+            count = filmDao.getCount();
 
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    if(count != 0){
-                        tvFilmCount.setText(StringUtils.getString(count));
-                    }
-                });
-            }
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> {
+                if (count != 0) {
+                    tvFilmCount.setText(StringUtils.getString(count));
+                }
+            });
         }).start();
     }
 
+    @Override
     @OnClick({R.id.ll_watch, R.id.ll_un_watch, R.id.btn_add})
     public void onClick(View view) {
         Intent intent;
@@ -114,6 +100,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_add:
                 intent = new Intent(getContext(), AddFilmActivity.class);
                 startActivity(intent);
+                break;
+            default:
                 break;
         }
     }

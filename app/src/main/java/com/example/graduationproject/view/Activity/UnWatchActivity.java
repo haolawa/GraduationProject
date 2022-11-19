@@ -23,6 +23,7 @@ import com.example.graduationproject.base.BaseActivity;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
 import com.example.graduationproject.model.FilmSaveBean;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -47,54 +48,30 @@ public class UnWatchActivity extends BaseActivity {
     RecyclerView recycleView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout smartRefreshLayout;
-    private List<FilmSaveBean> filmBeanList;// = new ArrayList<>();
+    private List<FilmSaveBean> filmBeanList = new ArrayList<>();
     private FilmSaveAdapter adapter;
 
 
     @Override
     protected void initData() {
-        initList();
+        ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isUnWatch);
     }
-    private void initList(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                List<FilmSaveBean> filmList = new ArrayList<>();
-                filmList = filmDao.getWatch(false);
-                filmBeanList.clear();
-                filmBeanList.addAll(filmList);
 
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    adapter.notifyDataSetChanged();
-                });
-            }
-        }).start();
-
-    }
     @Override
     protected void initView(Bundle bundle) {
         titleBar.setTitle("未看");
         titleBar.setBackOnclickListener(this);
 
-        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                Log.e("haolawa", "aa");
+        smartRefreshLayout.setOnRefreshListener(refreshLayout -> {
+            //关闭刷新方法
+            //refreshLayout.finishRefresh();
+            // refreshLayout.finishLoadMore();
 
-                //关闭刷新方法
-                //refreshLayout.finishRefresh();
-                // refreshLayout.finishLoadMore();
-
-            }
         });
-        smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                Log.e("haolawa", "bb");
-            }
+        smartRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
+        });
+        imgSearch.setOnClickListener(v -> {
+            // TODO: 2022/11/19 点击事件
         });
 
         initAdapter();
@@ -107,45 +84,27 @@ public class UnWatchActivity extends BaseActivity {
 
 
     private void initAdapter() {
-        filmBeanList = new ArrayList<>();
-
         adapter = new FilmSaveAdapter(R.layout.item_film_list, filmBeanList);
         recycleView.setLayoutManager(new LinearLayoutManager(this));
         recycleView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Intent intent = new Intent(UnWatchActivity.this, FilmDetailActivity.class);
-                intent.putExtra("uid",filmBeanList.get(position).getUid());
-                startActivity(intent);
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(UnWatchActivity.this, FilmDetailActivity.class);
+            intent.putExtra("uid", filmBeanList.get(position).getUid());
+            startActivity(intent);
 
-            }
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initList();
+        ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isUnWatch);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_un_watch;
+        return R.layout.layout_film_list;
     }
 
-    @OnClick({R.id.et_search, R.id.img_search, R.id.recycle_view, R.id.refreshLayout})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.et_search:
-                break;
-            case R.id.img_search:
-                break;
-            case R.id.recycle_view:
-                break;
-            case R.id.refreshLayout:
-                break;
-        }
-    }
 }

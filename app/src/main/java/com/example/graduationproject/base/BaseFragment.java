@@ -34,28 +34,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public abstract class BaseFragment extends Fragment {
 
-    private Unbinder unbinder;
+    protected Unbinder unbinder;
     public View mView;
-
-    protected abstract void initArgs(Bundle bundle);
 
     protected abstract void initView(Bundle bundle);
 
     protected abstract void initData();
 
+    protected abstract int getLayoutId();
+
     private InputMethodManager mInputMethodManager;
     private LayoutInflater inflater;
     private ViewGroup container;
-    //private ContextWrapper contextWrapper = new ContextWrapper(getActivity());
 
-    public static final int RC_CAMERA_PERM = 123;
-    public static final int RC_ALBUM_PERM = 124;
 
 
     @Nullable
@@ -68,8 +66,10 @@ public abstract class BaseFragment extends Fragment {
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         hideInputMethod();
 
+        setContentView(getLayoutId());
+        unbinder = ButterKnife.bind(this,mView);
+
         try {
-            initArgs(getArguments());
             initView(savedInstanceState);
             initData();
         } catch (Exception e) {
@@ -78,6 +78,7 @@ public abstract class BaseFragment extends Fragment {
         return mView;
 
     }
+
 
     protected void setContentView(int layout) {
         mView = inflater.inflate(layout, container, false);

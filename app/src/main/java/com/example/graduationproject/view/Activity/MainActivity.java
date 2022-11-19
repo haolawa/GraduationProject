@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout ll_mine;
 
 
-
     private ArrayList<Fragment> fragments;
     private MyFragmentPagerAdapter pagerAdapter;
 
@@ -51,13 +50,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initPager();
 
-// 设置菜单栏的点击事件
+        // 设置菜单栏的点击事件
         ll_main.setOnClickListener(this);
         ll_collect.setOnClickListener(this);
         ll_mine.setOnClickListener(this);
         viewPager.setOnPageChangeListener(new MyPagerChangeListener());
-
-
     }
 
 
@@ -79,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragments.add(new MainFragment());
         fragments.add(new CollectionFragment());
         fragments.add(new MineFragment());
-
 
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(pagerAdapter);
@@ -109,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 img_home.setImageResource(R.mipmap.icon_home_off);
                 img_collect.setImageResource(R.mipmap.icon_collection_off);
                 img_mine.setImageResource(R.mipmap.icon_mine_on);
+                break;
+            default:
                 break;
         }
     }
@@ -144,7 +142,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     img_collect.setImageResource(R.mipmap.icon_collection_off);
                     img_mine.setImageResource(R.mipmap.icon_mine_on);
                     break;
+                default:
+                    break;
             }
+
         }
     }
 

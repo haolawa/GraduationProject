@@ -22,8 +22,6 @@ public interface FilmDao {
     @Query("SELECT * FROM filmsavebean where iswatch=:is")
     List<FilmSaveBean> getWatch(boolean... is);
 
-
-
     @Query("SELECT * FROM filmsavebean where islove=:is")
     List<FilmSaveBean> getLove(boolean... is);
 

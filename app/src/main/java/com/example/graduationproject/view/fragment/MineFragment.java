@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.base.BaseFragment;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.LoginActivity;
 
@@ -23,7 +24,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class MineFragment extends Fragment {
+public class MineFragment extends BaseFragment {
 
     @BindView(R.id.title_bar)
     TitleBar titleBar;
@@ -37,28 +38,22 @@ public class MineFragment extends Fragment {
     LinearLayout llVersion;
     @BindView(R.id.btn_out_login)
     Button btnOutLogin;
-    private View rootView;
-    private Unbinder unbinder;
-   // private TitleBar titleBar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_mine, container, false);
-
-        }
-        unbinder = ButterKnife.bind(this, rootView);
-
-        initView();
-        return rootView;
-    }
-
-    private void initView() {
-
+    protected void initView(Bundle bundle) {
         titleBar.setTitle("我的");
     }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_mine;
+    }
+
 
     @OnClick({R.id.img_avatar, R.id.tv_username, R.id.ll_version, R.id.btn_out_login})
     public void onClick(View view) {
@@ -72,15 +67,12 @@ public class MineFragment extends Fragment {
                 break;
             case R.id.btn_out_login:
                 intent = new Intent(getContext(), LoginActivity.class);
-                Log.e("haolawa", "onClick: " );
+                Log.e("haolawa", "onClick: ");
                 startActivity(intent);
+                break;
+            default:
                 break;
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

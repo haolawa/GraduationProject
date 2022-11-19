@@ -30,11 +30,11 @@ public class BaseApplication extends Application {
 
         mApplicationContext = this;
 
-        Log.e(TAG, "BaseApplication onCreate" );
+        Log.e(TAG, "BaseApplication onCreate");
         //initOkGo();
 
         int pid = android.os.Process.myPid();
-        Log.e(TAG, "onCreate: pid: " + pid );
+        Log.e(TAG, "onCreate: pid: " + pid);
 
         inFresco();
         //JPushInterface.setDebugMode(true);
@@ -51,7 +51,7 @@ public class BaseApplication extends Application {
                 .setMainDiskCacheConfig(diskCacheConfig)
                 .build();
 
-        Fresco.initialize(mApplicationContext,imagePipelineConfig);
+        Fresco.initialize(mApplicationContext, imagePipelineConfig);
 
     }
 
