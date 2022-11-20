@@ -20,6 +20,7 @@ import com.example.graduationproject.R;
 import com.example.graduationproject.base.BaseFragment;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.AddFilmActivity;
 import com.example.graduationproject.view.Activity.UnWatchActivity;
@@ -42,13 +43,12 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     LinearLayout llUnWatch;
     @BindView(R.id.btn_add)
     Button btnAdd;
-    private int count;
 
 
     @Override
     protected void initView(Bundle bundle) {
         titleBar.setTitle("主页");
-        getCount();
+        ThreadUtils.filmCount(getContext(),tvFilmCount);
     }
 
     @Override
@@ -65,23 +65,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        getCount();
-    }
-
-    private void getCount() {
-        // TODO: 2022/11/19
-        new Thread(() -> {
-            AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(), AppDatabase.class, "myfilm.db").build();
-            FilmDao filmDao = db.filmDao();
-            count = filmDao.getCount();
-
-            Handler mainHandler = new Handler(Looper.getMainLooper());
-            mainHandler.post(() -> {
-                if (count != 0) {
-                    tvFilmCount.setText(StringUtils.getString(count));
-                }
-            });
-        }).start();
+        ThreadUtils.filmCount(getContext(),tvFilmCount);
     }
 
     @Override

@@ -42,6 +42,10 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void initView(Bundle bundle) {
         titleBar.setTitle("我的");
+        btnOutLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -52,27 +56,6 @@ public class MineFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_mine;
-    }
-
-
-    @OnClick({R.id.img_avatar, R.id.tv_username, R.id.ll_version, R.id.btn_out_login})
-    public void onClick(View view) {
-        Intent intent;
-        switch (view.getId()) {
-            case R.id.img_avatar:
-                break;
-            case R.id.tv_username:
-                break;
-            case R.id.ll_version:
-                break;
-            case R.id.btn_out_login:
-                intent = new Intent(getContext(), LoginActivity.class);
-                Log.e("haolawa", "onClick: ");
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
     }
 
 }

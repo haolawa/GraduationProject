@@ -62,16 +62,11 @@ public class UnWatchActivity extends BaseActivity {
         titleBar.setTitle("未看");
         titleBar.setBackOnclickListener(this);
 
-        smartRefreshLayout.setOnRefreshListener(refreshLayout -> {
-            //关闭刷新方法
-            //refreshLayout.finishRefresh();
-            // refreshLayout.finishLoadMore();
-
-        });
-        smartRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
-        });
+        //            关闭刷新方法
+        smartRefreshLayout.setOnRefreshListener(RefreshLayout::finishRefresh);
+        smartRefreshLayout.setOnLoadMoreListener(RefreshLayout::finishLoadMore);
         imgSearch.setOnClickListener(v -> {
-            // TODO: 2022/11/19 点击事件
+            ThreadUtils.filmSearch(this,etSearch.getText().toString(),filmBeanList,adapter);
         });
 
         initAdapter();

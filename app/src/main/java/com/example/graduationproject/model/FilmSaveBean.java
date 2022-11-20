@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import lombok.Data;
+import lombok.NonNull;
 import lombok.ToString;
 
 @Data

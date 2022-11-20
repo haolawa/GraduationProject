@@ -1,6 +1,7 @@
 package com.example.graduationproject.controller;
 
 import androidx.room.Dao;
+import androidx.room.DatabaseView;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -28,9 +29,8 @@ public interface FilmDao {
     @Query("SELECT * FROM filmsavebean where uid=:uid")
     FilmSaveBean getIdDetail(int... uid);
 
-//    @Query("SELECT　＊ FROM filmsacebean where film_name LIKE '%' || :name || '%' ")
-//    List<FilmSaveBean> getNameFilm(String... name);
-
+    @Query("SELECT * FROM filmsavebean where film_name LIKE '%' || :name || '%'" )
+    List<FilmSaveBean> getNameFilm(String... name);
 
     @Insert
     void insertAll(FilmSaveBean... filmSaveBeans);

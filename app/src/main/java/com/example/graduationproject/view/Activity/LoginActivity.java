@@ -62,6 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                 intent = new Intent(this,RegisterActivity.class);
                 startActivity(intent);
                 break;
+            default:
+                break;
         }
     }
 }

@@ -64,7 +64,7 @@ public class CollectionFragment extends BaseFragment{
         initAdapter();
         ThreadUtils.filmList(getActivity().getApplicationContext(),filmBeanList,adapter,ThreadUtils.isLove);
         imgSearch.setOnClickListener(v -> {
-            // TODO: 2022/11/19 点击事件
+            ThreadUtils.filmSearch(getActivity(),etSearch.getText().toString(),filmBeanList,adapter);
         });
     }
 

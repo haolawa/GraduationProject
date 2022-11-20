@@ -57,6 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
                 break;
             case R.id.btn_register:
                 break;
+            default:
+                break;
         }
     }
 }

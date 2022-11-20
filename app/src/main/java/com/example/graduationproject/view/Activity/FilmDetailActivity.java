@@ -330,6 +330,8 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                         Log.e("haolawa1","3");
                         popupWindow.dismiss();
                         break;
+                    default:
+                        break;
                 }
             }
         });

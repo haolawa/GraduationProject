@@ -57,7 +57,7 @@ public class WatchActivity extends BaseActivity {
 
         });
         imgSearch.setOnClickListener(v -> {
-            // TODO: 2022/11/19 点击事件
+            ThreadUtils.filmSearch(this,etSearch.getText().toString(),filmBeanList,adapter);
         });
 
         initAdapter();
