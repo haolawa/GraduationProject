@@ -1,9 +1,5 @@
 package com.example.graduationproject.view.Activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -21,10 +17,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import androidx.annotation.Nullable;
+import androidx.room.Room;
+
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.codbking.widget.DatePickDialog;
@@ -34,26 +30,17 @@ import com.example.graduationproject.R;
 import com.example.graduationproject.base.BaseActivity;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
-import com.example.graduationproject.model.FilmDetailBean;
 import com.example.graduationproject.model.FilmSaveBean;
-import com.example.graduationproject.utils.Constants;
 import com.example.graduationproject.utils.DateUtil;
 import com.example.graduationproject.utils.PopupWindowThree;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.yalantis.ucrop.UCrop;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class FilmDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -100,9 +87,6 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
     private String path;
 
 
-
-
-
     @Override
     protected void initArgs(Intent intent) {
 
@@ -110,20 +94,17 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
-        uid = getIntent().getIntExtra("uid",0);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                filmBean = filmDao.getIdDetail(uid);
+        uid = getIntent().getIntExtra("uid", 0);
+        new Thread(() -> {
+            AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "myfilm.db").build();
+            FilmDao filmDao = db.filmDao();
+            filmBean = filmDao.getIdDetail(uid);
 
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    showView();
-                });
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> {
+                showView();
+            });
 
-            }
         }).start();
     }
 
@@ -147,7 +128,6 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
         btnDelete.setOnClickListener(this);
 
 
-
         etFilmName.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
 
@@ -159,17 +139,17 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.img_watch:
                 isImgWatch = !isImgWatch;
-                if(isImgWatch){
+                if (isImgWatch) {
                     imgWatch.setImageResource(R.mipmap.watch);
-                }else{
+                } else {
                     imgWatch.setImageResource(R.mipmap.unwatch);
                 }
                 break;
             case R.id.img_love:
                 isImgLove = !isImgLove;
-                if(isImgLove){
+                if (isImgLove) {
                     imgLove.setImageResource(R.mipmap.love);
-                }else{
+                } else {
                     imgLove.setImageResource(R.mipmap.unlove);
                 }
                 break;
@@ -177,7 +157,7 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                 initPickTimer(tvFilmTime);
                 break;
             case R.id.btn_save:
-                if(haveData()){
+                if (haveData()) {
                     upDataFilm();
                     ToastShow("保存成功！");
                 }
@@ -191,62 +171,61 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
 
         }
     }
-    private boolean haveData(){
-        if(etFilmName.getText().equals("")){
+
+    private boolean haveData() {
+        if (etFilmName.getText().equals("")) {
             ToastShow("请输入电影名称");
             return false;
         }
-        if(etFilmDetail.getText().equals("")){
+        if (etFilmDetail.getText().equals("")) {
             ToastShow("请输入电影详情");
             return false;
         }
-        if(etPerformer.getText().equals("")){
+        if (etPerformer.getText().equals("")) {
             ToastShow("请输入电影演员");
             return false;
         }
-        if(etDirector.getText().equals("")){
+        if (etDirector.getText().equals("")) {
             ToastShow("请输入电影导演");
             return false;
         }
-        if(etFilmStyle.getText().equals("")){
+        if (etFilmStyle.getText().equals("")) {
             ToastShow("请输入电影类型");
             return false;
         }
-        if(etReview.getText().equals("")){
+        if (etReview.getText().equals("")) {
             ToastShow("请输入电影感想");
             return false;
         }
-        if(tvFilmTime.getText().equals("")){
+        if (tvFilmTime.getText().equals("")) {
             ToastShow("请输入电影时间");
             return false;
         }
 
         return true;
     }
-    private void upDataFilm(){
-        new Thread(() -> {
-            AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-            FilmDao filmDao = db.filmDao();
-            FilmSaveBean filmSaveBean = new FilmSaveBean();
-            filmSaveBean.setUid(filmBean.getUid());
-            filmSaveBean.setFilmName(etFilmName.getText().toString());
-            if(!StringUtils.isEmpty(path)){
-                filmSaveBean.setFilmImg(path);
-            }
 
-            filmSaveBean.setFilmDetail(etFilmDetail.getText().toString());
-            filmSaveBean.setFilmNote(etReview.getText().toString());
-            filmSaveBean.setFilmDirectors(etDirector.getText().toString());
-            filmSaveBean.setFilmTime(tvFilmTime.getText().toString());
-            filmSaveBean.setFilmPerformer(etPerformer.getText().toString());
-            filmSaveBean.setFilmType(etFilmStyle.getText().toString());
-            filmSaveBean.setLove(isImgLove);
-            filmSaveBean.setWatch(isImgWatch);
+    private void upDataFilm() {
 
-            // filmDao.deleteAll();
-            filmDao.upData(filmSaveBean);
-        }).start();
+        FilmSaveBean filmSaveBean = new FilmSaveBean();
+        filmSaveBean.setUid(filmBean.getUid());
+        filmSaveBean.setFilmName(etFilmName.getText().toString());
+        if (!StringUtils.isEmpty(path)) {
+            filmSaveBean.setFilmImg(path);
+        }
+        filmSaveBean.setFilmDetail(etFilmDetail.getText().toString());
+        filmSaveBean.setFilmNote(etReview.getText().toString());
+        filmSaveBean.setFilmDirectors(etDirector.getText().toString());
+        filmSaveBean.setFilmTime(tvFilmTime.getText().toString());
+        filmSaveBean.setFilmPerformer(etPerformer.getText().toString());
+        filmSaveBean.setFilmType(etFilmStyle.getText().toString());
+        filmSaveBean.setLove(isImgLove);
+        filmSaveBean.setWatch(isImgWatch);
+
+        ThreadUtils.filmSave(this, filmSaveBean);
+
     }
+
     //改变按钮背景
     private boolean changeImageWatch(ImageView img, boolean is) {
         if (is) {
@@ -259,46 +238,46 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
         return is;
     }
 
-    private void showView(){
+    private void showView() {
 
-        if(!StringUtils.isEmpty(filmBean.getFilmName())){
+        if (!StringUtils.isEmpty(filmBean.getFilmName())) {
             etFilmName.setText(filmBean.getFilmName());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmImg())){
+        if (!StringUtils.isEmpty(filmBean.getFilmImg())) {
             imgFilm.setImageURI(filmBean.getFilmImg());
             path = filmBean.getFilmImg();
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmType())){
+        if (!StringUtils.isEmpty(filmBean.getFilmType())) {
             etFilmStyle.setText(filmBean.getFilmType());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmTime())){
+        if (!StringUtils.isEmpty(filmBean.getFilmTime())) {
             tvFilmTime.setText(filmBean.getFilmTime());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmDirectors())){
+        if (!StringUtils.isEmpty(filmBean.getFilmDirectors())) {
             etDirector.setText(filmBean.getFilmDirectors());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmPerformer())){
+        if (!StringUtils.isEmpty(filmBean.getFilmPerformer())) {
             etPerformer.setText(filmBean.getFilmPerformer());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmDetail())){
+        if (!StringUtils.isEmpty(filmBean.getFilmDetail())) {
             etFilmDetail.setText(filmBean.getFilmDetail());
         }
-        if(!StringUtils.isEmpty(filmBean.getFilmNote())){
+        if (!StringUtils.isEmpty(filmBean.getFilmNote())) {
             etReview.setText(filmBean.getFilmNote());
         }
 
-        if(filmBean.isLove){
+        if (filmBean.isLove) {
             imgLove.setImageResource(R.mipmap.love);
             isImgLove = true;
-        }else{
+        } else {
             imgLove.setImageResource(R.mipmap.unlove);
             isImgLove = false;
         }
 
-        if(filmBean.isWatch){
+        if (filmBean.isWatch) {
             imgWatch.setImageResource(R.mipmap.watch);
             isImgWatch = true;
-        }else{
+        } else {
             imgWatch.setImageResource(R.mipmap.unwatch);
             isImgWatch = false;
         }
@@ -318,16 +297,16 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                         popupWindow.dismiss();
                         //调相机
                         checkCamera();
-                        Log.e("haolawa1","1");
+                        Log.e("haolawa1", "1");
                         break;
                     case R.id.tv_item_2:
-                        Log.e("haolawa1","2");
+                        Log.e("haolawa1", "2");
                         popupWindow.dismiss();
                         //调相册
                         checkAlbum();
                         break;
                     case R.id.tv_item_3:
-                        Log.e("haolawa1","3");
+                        Log.e("haolawa1", "3");
                         popupWindow.dismiss();
                         break;
                     default:
@@ -337,7 +316,6 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
         });
 
     }
-
 
 
     private void initPickTimer(TextView tvOption) {
@@ -377,7 +355,7 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-       if(requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             startUCrop(FilmDetailActivity.this, mCameraImagePath, UCrop.REQUEST_CROP, ratioX, ratioY);
 
             //   imgWebPower.setImageURI(mCameraImagePath);
@@ -385,8 +363,7 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                     .load(mCameraImagePath)
                     .into(imgFilm);
 
-        }
-        else if(requestCode == ALBUM_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == ALBUM_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumns = {MediaStore.Images.Media.DATA};
@@ -404,8 +381,7 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
                         .into(imgFilm);
             }
 
-        }
-        else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+        } else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
 //            Glide.with(this)
 //                    .load(resultUri.toString())
@@ -415,9 +391,6 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
             //   imgFilm.setImageURI(resultUri);
 
 
-
-
-
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
             ToastShow("未知错误！");
@@ -425,21 +398,14 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    private void deleteFilm(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"myfilm.db").build();
-                FilmDao filmDao = db.filmDao();
-                filmDao.delete(filmBean);
-
-                finish();
-            }
-        }).start();
+    private void deleteFilm() {
+        ThreadUtils.filmDelete(this, filmBean);
+        finish();
     }
+
     @Override
     protected int getLayoutId() {
 
-        return R.layout.activity_film_detail;
+        return R.layout.activity_add_film;
     }
 }

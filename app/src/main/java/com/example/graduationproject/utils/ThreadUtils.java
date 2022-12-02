@@ -21,7 +21,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author luowen
@@ -50,11 +49,8 @@ public class ThreadUtils {
 
 
     public static void filmList(Context context, List<FilmSaveBean> beans, FilmSaveAdapter adapter, int tag) {
-
+        FilmDao filmDao = getFilmDao(context);
         threadPool.execute(() -> {
-            AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, DBNAME)
-                    .build();
-            FilmDao filmDao = db.filmDao();
             List<FilmSaveBean> filmList = new ArrayList<>();
             switch (tag) {
                 case 0:
@@ -79,10 +75,8 @@ public class ThreadUtils {
 
     public static void filmCount(Context context, TextView textView) {
         AtomicInteger count = new AtomicInteger();
-
+        FilmDao filmDao = getFilmDao(context);
         threadPool.execute(() -> {
-            AppDatabase db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME).build();
-            FilmDao filmDao = db.filmDao();
             count.set(filmDao.getCount());
             Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(() -> {
@@ -94,15 +88,41 @@ public class ThreadUtils {
     }
 
     public static void filmSearch(Context context, String search, List<FilmSaveBean> beans, FilmSaveAdapter adapter) {
-
+        FilmDao filmDao = getFilmDao(context);
         threadPool.execute(() -> {
-            AppDatabase db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME).build();
-            FilmDao filmDao = db.filmDao();
             List<FilmSaveBean> filmList = filmDao.getNameFilm(search);
             beans.clear();
             beans.addAll(filmList);
             Handler mainHandler = new Handler(Looper.getMainLooper());
             mainHandler.post(adapter::notifyDataSetChanged);
         });
+    }
+
+    public static void filmSave(Context context, FilmSaveBean filmBean) {
+        FilmDao filmDao = getFilmDao(context);
+        threadPool.execute(() -> {
+            filmDao.upData(filmBean);
+        });
+    }
+
+    public static void insertData(Context context, FilmSaveBean filmBean) {
+        FilmDao filmDao = getFilmDao(context);
+        threadPool.execute(() -> {
+            filmDao.insertData(filmBean);
+        });
+    }
+
+    public static void filmDelete(Context context, FilmSaveBean filmBean) {
+        FilmDao filmDao = getFilmDao(context);
+        threadPool.execute(() -> {
+            filmDao.delete(filmBean);
+        });
+    }
+
+    private static FilmDao getFilmDao(Context context) {
+        //AppDatabase db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME).build();
+        return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME)
+                .build()
+                .filmDao();
     }
 }

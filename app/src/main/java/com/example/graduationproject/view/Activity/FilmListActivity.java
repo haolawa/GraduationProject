@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -53,7 +55,9 @@ public class FilmListActivity extends BaseActivity {
     RecyclerView recycleView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    private List<FilmBean> filmBeanList;// = new ArrayList<>();
+    @BindView(R.id.ll_loading_point_view)
+    LinearLayout linearLayout;
+    private List<FilmBean> filmBeanList;
     private FilmListAdapter adapter;
     private String name;
     private int mPage = 1;
@@ -74,21 +78,10 @@ public class FilmListActivity extends BaseActivity {
         titleBar.setTitle("找到的电影");
         titleBar.setBackOnclickListener(this);
         name = getIntent().getStringExtra("name");
-       // etSearch.requestFocus();
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mPage = 1;
-                getData();
-            }
-        });
-//        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-//                mPage++;
-//                getData();
-//            }
-//        });
+        //关闭刷新和上拉加载
+        refreshLayout.setEnableLoadMore(false);
+        refreshLayout.setEnableRefresh(false);
+        //linearLayout.setVisibility(View.VISIBLE);
         getData();
 
         initAdapter();
@@ -100,24 +93,15 @@ public class FilmListActivity extends BaseActivity {
 
     }
 
-    private void getData(){
+    private void getData() {
 
-        if(!name.equals("")){
+        if (!name.equals("")) {
             String url = Constants.IMDB_SEARCHMOVIE + "/" + Constants.IMDBKEY + "/" + name;
             imdbSearch(url);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadingPointView.onDetachedFromWindow();
-                    loadingPointView.setVisibility(View.GONE);
-                    refreshLayout.setVisibility(View.VISIBLE);
-                    // TODO
-                }
-            }, 5000);
         }
     }
 
-    private void imdbSearch(String url){
+    private void imdbSearch(String url) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
@@ -128,59 +112,37 @@ public class FilmListActivity extends BaseActivity {
             }
 
             @Override
-            public void onResponse(Call call,Response response) throws IOException {
-                if(response.isSuccessful()){
-                    if (mPage == 1) {
-                        refreshLayout.finishRefresh();
-                    }
-//                    else {
-//                        refreshLayout.finishLoadMore();
-//                    }
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+//                    MainThread
+//                    loadingPointView.onDetachedFromWindow();
+//                    linearLayout.setVisibility(View.GONE);
                     try {
                         JSONObject jsonObject = JSON.parseObject(response.body().string());
                         String data = jsonObject.getString("results");
-                        List<FilmBean> filmBeans = JSONObject.parseArray(data,FilmBean.class);
-                        if(mPage == 1){
-                            filmBeanList.clear();
-                        }
-                        filmBeanList.addAll(filmBeans);
-                        adapter.notifyDataSetChanged();
+                        List<FilmBean> filmBeans = JSONObject.parseArray(data, FilmBean.class);
+//                        if (mPage == 1) {
+//                            filmBeanList.clear();
+//                        }
 
-
-
-
-
+                        adapter.setList(filmBeans);
                     } catch (Exception e) {
                         e.printStackTrace();
-
                     }
-
-
                 }
             }
         });
     }
+
     private void initAdapter() {
-        filmBeanList = new ArrayList<>();
-      //  FilmBean vo = new FilmBean();
-      //  filmBeanList.add(vo);
         adapter = new FilmListAdapter(R.layout.item_film_list, filmBeanList);
         recycleView.setLayoutManager(new LinearLayoutManager(this));
         recycleView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Intent intent = new Intent(FilmListActivity.this, AddFilmActivity.class);
-                intent.putExtra("id",filmBeanList.get(position).getId());
-                setResult(RESULT_CODE,intent);
-                finish();
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(FilmListActivity.this, AddFilmActivity.class);
+            intent.putExtra("id", adapter.getItemId(position));
+            setResult(RESULT_CODE, intent);
+            finish();
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

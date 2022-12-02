@@ -2,24 +2,13 @@ package com.example.graduationproject.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.room.Room;
-
-import com.blankj.utilcode.util.StringUtils;
 import com.example.graduationproject.R;
 import com.example.graduationproject.base.BaseFragment;
-import com.example.graduationproject.controller.AppDatabase;
-import com.example.graduationproject.controller.FilmDao;
 import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.AddFilmActivity;
@@ -27,9 +16,7 @@ import com.example.graduationproject.view.Activity.UnWatchActivity;
 import com.example.graduationproject.view.Activity.WatchActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 
 public class MainFragment extends BaseFragment implements View.OnClickListener {

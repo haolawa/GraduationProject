@@ -40,7 +40,6 @@ import butterknife.Unbinder;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-//implements EasyPermissions.PermissionCallbacks
 public abstract class BaseActivity extends AppCompatActivity {
 
 

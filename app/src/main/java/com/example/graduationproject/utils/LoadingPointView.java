@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -78,6 +79,7 @@ public class LoadingPointView extends View {
         for (int i = 0; i < 5; i++) {
             //修改圆心x轴坐标，来画出多个圆点
             canvas.drawCircle(getHeight() / 2 + mRadius * i * 2 + 5 * i, getHeight() / 2, mRadius, mWhitePaint);
+
         }
         //动态修改绿色圆点的位置
         canvas.drawCircle(getHeight() / 2 + mRadius * mIndex * 2 + 5 * mIndex, getHeight() / 2, mRadius, mGreenPaint);

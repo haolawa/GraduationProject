@@ -35,5 +35,91 @@ public class FilmSaveBean {
     @ColumnInfo(name = "iswatch")
     public boolean isWatch;
 
+    public int getUid() {
+        return uid;
+    }
 
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public String getFilmName() {
+        return filmName;
+    }
+
+    public void setFilmName(String filmName) {
+        this.filmName = filmName;
+    }
+
+    public String getFilmImg() {
+        return filmImg;
+    }
+
+    public void setFilmImg(String filmImg) {
+        this.filmImg = filmImg;
+    }
+
+    public String getFilmTime() {
+        return filmTime;
+    }
+
+    public void setFilmTime(String filmTime) {
+        this.filmTime = filmTime;
+    }
+
+    public String getFilmType() {
+        return filmType;
+    }
+
+    public void setFilmType(String filmType) {
+        this.filmType = filmType;
+    }
+
+    public String getFilmDirectors() {
+        return filmDirectors;
+    }
+
+    public void setFilmDirectors(String filmDirectors) {
+        this.filmDirectors = filmDirectors;
+    }
+
+    public String getFilmPerformer() {
+        return filmPerformer;
+    }
+
+    public void setFilmPerformer(String filmPerformer) {
+        this.filmPerformer = filmPerformer;
+    }
+
+    public String getFilmDetail() {
+        return filmDetail;
+    }
+
+    public void setFilmDetail(String filmDetail) {
+        this.filmDetail = filmDetail;
+    }
+
+    public String getFilmNote() {
+        return filmNote;
+    }
+
+    public void setFilmNote(String filmNote) {
+        this.filmNote = filmNote;
+    }
+
+    public boolean isLove() {
+        return isLove;
+    }
+
+    public void setLove(boolean love) {
+        isLove = love;
+    }
+
+    public boolean isWatch() {
+        return isWatch;
+    }
+
+    public void setWatch(boolean watch) {
+        isWatch = watch;
+    }
 }

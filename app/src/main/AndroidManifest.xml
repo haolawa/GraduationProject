@@ -26,13 +26,13 @@
         android:supportsRtl="true"
         android:theme="@style/MyDesign">
         <activity
+            android:name=".view.Activity.AddFilmActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.Activity.FilmDetailActivity"
             android:exported="false" />
         <activity
             android:name=".view.Activity.FilmListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.Activity.AddFilmActivity"
             android:exported="false" />
         <activity
             android:name=".view.Activity.UnWatchActivity"

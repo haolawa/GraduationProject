@@ -35,6 +35,9 @@ public interface FilmDao {
     @Insert
     void insertAll(FilmSaveBean... filmSaveBeans);
 
+    @Insert
+    void insertData(FilmSaveBean filmSaveBean);
+
     @Delete
     void delete(FilmSaveBean filmsavebean);
 
