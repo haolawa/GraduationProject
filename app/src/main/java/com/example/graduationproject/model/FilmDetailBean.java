@@ -1,5 +1,6 @@
 package com.example.graduationproject.model;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -15,8 +16,7 @@ public class FilmDetailBean {
     private String type;
     private String year;
     private String image;
-  //  private Date releaseDate;
-    private String releaseDate;
+    private Date releaseDate;
     private String runtimeMins;
     private String runtimeStr;
     private String plot;
@@ -24,29 +24,21 @@ public class FilmDetailBean {
     private boolean plotLocalIsRtl;
     private String awards;
     private String directors;
-   // private List<DirectorList> directorList;
-    private String directorList;
+//    private List<DirectorList> directorList;
     private String writers;
-   // private List<WriterList> writerList;
-    private String writerList;
+//    private List<WriterList> writerList;
     private String stars;
-   // private List<StarList> starList;
-   private String starList;
-   // private List<ActorList> actorList;
-   private String actorList;
+//    private List<StarList> starList;
+//    private List<ActorList> actorList;
     private String fullCast;
     private String genres;
-   // private List<GenreList> genreList;
-   private String genreList;
+//    private List<GenreList> genreList;
     private String companies;
-  //  private List<CompanyList> companyList;
-  private String companyList;
+//    private List<CompanyList> companyList;
     private String countries;
-   // private List<CountryList> countryList;
-   private String countryList;
+//    private List<CountryList> countryList;
     private String languages;
-   // private List<LanguageList> languageList;
-   private String languageList;
+//    private List<LanguageList> languageList;
     private String contentRating;
     private String imDbRating;
     private String imDbRatingVotes;
@@ -56,17 +48,22 @@ public class FilmDetailBean {
     private String posters;
     private String images;
     private String trailer;
-   // private BoxOffice boxOffice;
-    private String boxOffice;
+//    private BoxOffice boxOffice;
     private String tagline;
     private String keywords;
-   // private List<String> keywordList;
-   private String keywordList;
-   // private List<Similars> similars;
-   private String similars;
+    private List<String> keywordList;
+//    private List<Similars> similars;
     private String tvSeriesInfo;
     private String tvEpisodeInfo;
     private String errorMessage;
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     public String getId() {
         return id;
@@ -122,14 +119,6 @@ public class FilmDetailBean {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public String getRuntimeMins() {
@@ -188,13 +177,13 @@ public class FilmDetailBean {
         this.directors = directors;
     }
 
-    public String getDirectorList() {
-        return directorList;
-    }
-
-    public void setDirectorList(String directorList) {
-        this.directorList = directorList;
-    }
+//    public List<DirectorList> getDirectorList() {
+//        return directorList;
+//    }
+//
+//    public void setDirectorList(List<DirectorList> directorList) {
+//        this.directorList = directorList;
+//    }
 
     public String getWriters() {
         return writers;
@@ -204,36 +193,12 @@ public class FilmDetailBean {
         this.writers = writers;
     }
 
-    public String getWriterList() {
-        return writerList;
-    }
-
-    public void setWriterList(String writerList) {
-        this.writerList = writerList;
-    }
-
     public String getStars() {
         return stars;
     }
 
     public void setStars(String stars) {
         this.stars = stars;
-    }
-
-    public String getStarList() {
-        return starList;
-    }
-
-    public void setStarList(String starList) {
-        this.starList = starList;
-    }
-
-    public String getActorList() {
-        return actorList;
-    }
-
-    public void setActorList(String actorList) {
-        this.actorList = actorList;
     }
 
     public String getFullCast() {
@@ -252,28 +217,12 @@ public class FilmDetailBean {
         this.genres = genres;
     }
 
-    public String getGenreList() {
-        return genreList;
-    }
-
-    public void setGenreList(String genreList) {
-        this.genreList = genreList;
-    }
-
     public String getCompanies() {
         return companies;
     }
 
     public void setCompanies(String companies) {
         this.companies = companies;
-    }
-
-    public String getCompanyList() {
-        return companyList;
-    }
-
-    public void setCompanyList(String companyList) {
-        this.companyList = companyList;
     }
 
     public String getCountries() {
@@ -284,28 +233,12 @@ public class FilmDetailBean {
         this.countries = countries;
     }
 
-    public String getCountryList() {
-        return countryList;
-    }
-
-    public void setCountryList(String countryList) {
-        this.countryList = countryList;
-    }
-
     public String getLanguages() {
         return languages;
     }
 
     public void setLanguages(String languages) {
         this.languages = languages;
-    }
-
-    public String getLanguageList() {
-        return languageList;
-    }
-
-    public void setLanguageList(String languageList) {
-        this.languageList = languageList;
     }
 
     public String getContentRating() {
@@ -380,14 +313,6 @@ public class FilmDetailBean {
         this.trailer = trailer;
     }
 
-    public String getBoxOffice() {
-        return boxOffice;
-    }
-
-    public void setBoxOffice(String boxOffice) {
-        this.boxOffice = boxOffice;
-    }
-
     public String getTagline() {
         return tagline;
     }
@@ -404,20 +329,12 @@ public class FilmDetailBean {
         this.keywords = keywords;
     }
 
-    public String getKeywordList() {
+    public List<String> getKeywordList() {
         return keywordList;
     }
 
-    public void setKeywordList(String keywordList) {
+    public void setKeywordList(List<String> keywordList) {
         this.keywordList = keywordList;
-    }
-
-    public String getSimilars() {
-        return similars;
-    }
-
-    public void setSimilars(String similars) {
-        this.similars = similars;
     }
 
     public String getTvSeriesInfo() {

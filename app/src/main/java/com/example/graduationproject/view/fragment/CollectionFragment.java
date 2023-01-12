@@ -79,7 +79,7 @@ public class CollectionFragment extends BaseFragment{
     }
 
     private void initAdapter() {
-        adapter = new FilmSaveAdapter(R.layout.item_film_list, filmBeanList);
+        adapter = new FilmSaveAdapter(filmBeanList);
         recycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycleView.setAdapter(adapter);
 

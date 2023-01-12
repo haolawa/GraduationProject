@@ -79,7 +79,7 @@ public class UnWatchActivity extends BaseActivity {
 
 
     private void initAdapter() {
-        adapter = new FilmSaveAdapter(R.layout.item_film_list, filmBeanList);
+        adapter = new FilmSaveAdapter(filmBeanList);
         recycleView.setLayoutManager(new LinearLayoutManager(this));
         recycleView.setAdapter(adapter);
 

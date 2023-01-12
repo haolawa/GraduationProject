@@ -16,8 +16,8 @@ import java.util.List;
 
 public class FilmListAdapter extends BaseQuickAdapter<FilmBean, BaseViewHolder> {
 
-    public FilmListAdapter(int layoutResId, @NonNull List<FilmBean> data) {
-        super(layoutResId, data);
+    public FilmListAdapter() {
+        super(R.layout.item_film_list);
     }
 
     @Override

@@ -9,34 +9,32 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.method.ScrollingMovementMethod
 import android.view.Gravity
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.JSONObject
 import com.blankj.utilcode.util.StringUtils
 import com.bumptech.glide.Glide
 import com.codbking.widget.DatePickDialog
 import com.codbking.widget.bean.DateType
 import com.example.graduationproject.R
+import com.example.graduationproject.contract.FilmDetailContract
 import com.example.graduationproject.databinding.ActivityAddFilmBinding
 import com.example.graduationproject.model.FilmDetailBean
 import com.example.graduationproject.model.FilmSaveBean
+import com.example.graduationproject.presenter.FilmDetailPresenter
 import com.example.graduationproject.utils.*
 import com.example.graduationproject.utils.CameraUtil.ALBUM_REQUEST_CODE
 import com.example.graduationproject.utils.CameraUtil.CAMERA_REQUEST_CODE
 import com.yalantis.ucrop.UCrop
-import okhttp3.*
-import java.io.IOException
 
-class AddFilmActivity : AppCompatActivity() {
+class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
 
     private var isImgWatch = false
     private var isImgLove = false
@@ -49,6 +47,8 @@ class AddFilmActivity : AppCompatActivity() {
     private lateinit var cameraUtil: CameraUtil
     private lateinit var viewBinding: ActivityAddFilmBinding
     private val emptyString = ""
+    private var presenter: FilmDetailPresenter? = null//presenter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,25 +119,6 @@ class AddFilmActivity : AppCompatActivity() {
             ToastShow("请输入电影类型")
             return false
         }
-//        if (StringUtils.equals(viewBinding.etFilmDetail.text,emptyString)) {
-//            ToastShow("请输入电影详情")
-//            return false
-//        }
-//        if (StringUtils.equals(viewBinding.etDirector.text,emptyString)) {
-//            ToastShow("请输入电影导演")
-//            return false
-//        }
-//
-//        if (StringUtils.equals(viewBinding.etPerformer.text,emptyString)) {
-//            ToastShow("请输入电影演员")
-//            return false
-//        }
-//
-//        if (StringUtils.equals(viewBinding.etReview.text,emptyString)) {
-//            ToastShow("请输入电影感想")
-//            return false
-//        }
-
         return true
     }
 
@@ -176,47 +157,12 @@ class AddFilmActivity : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_CODE)
     }
 
-    private fun fromData(id: String?) {
+    private fun getData(id: String?) {
         // TODO: 2022/11/26 MVP
-        val url = Constants.IMDB_TITLE + "/" + Constants.IMDBKEY + "/" + id
-        val client = OkHttpClient()
-        val request = Request.Builder().url(url).build()
-        val call = client.newCall(request)
-        call.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {}
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    try {
-                        val jsonObject = JSON.parseObject(
-                            response.body()!!.string()
-                        )
-                        val data = jsonObject.toString()
-                        filmBean = JSONObject.parseObject(
-                            data,
-                            FilmDetailBean::class.java
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        })
-    }
-
-    private fun showView() {
-        viewBinding.apply {
-            etFilmName.setText(filmBean.getTitle() ?: "")
-            imgFilm.setImageURI(filmBean.getImage() ?: "")
-            path = filmBean.getImage() ?: ""
-            etFilmStyle.setText(filmBean.getGenres() ?: "")
-            tvFilmTime.setText(filmBean.getReleaseDate() ?: "")
-            etDirector.setText(filmBean.getDirectors() ?: "")
-            etPerformer.setText(filmBean.getStars() ?: "")
-            etFilmDetail.setText(filmBean.getPlot() ?: "")
+        if (null == presenter) {
+            presenter = FilmDetailPresenter(this)
         }
-
+        presenter!!.requestFilmListResult("${Constants.IMDB_TITLE}/$id")
     }
 
     private fun showPopupWindow(view: View) {
@@ -290,11 +236,7 @@ class AddFilmActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE) {
-            val id = data!!.getStringExtra("id")
-            if (id != "") {
-                fromData(id)
-            }
-            Handler().postDelayed({ showView() }, 2000)
+            getData(data!!.getStringExtra("id"))//tt11405250
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             cameraUtil.startUCrop(cameraUtil.mCameraImagePath, UCrop.REQUEST_CROP, ratioX, ratioY)
         } else if (requestCode == ALBUM_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -388,5 +330,26 @@ class AddFilmActivity : AppCompatActivity() {
 
     private fun ToastShow(text: String?) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun handleFilmDetailResult(result: FilmDetailBean) {
+        viewBinding.run {
+            etFilmName.setText(result.getTitle() ?: "")
+            path = result.getImage() ?: ""
+            imgFilm.setImageURI(path)
+            etFilmStyle.setText(result.getGenres() ?: "")
+            tvFilmTime.setText(result.getReleaseDate()?.toString() ?: "")
+            etDirector.setText(result.getDirectors() ?: "")
+            etPerformer.setText(result.getStars() ?: "")
+            etFilmDetail.setText(result.getPlot() ?: "")
+        }
+    }
+
+    override fun showToast(resId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showToast(text: String?) {
+        TODO("Not yet implemented")
     }
 }

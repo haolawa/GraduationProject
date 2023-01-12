@@ -79,8 +79,8 @@ dependencies {
 
     //OkHttp
 //    implementation 'com.squareup.okhttp3:okhttp:3.14.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-    implementation 'com.squareup.okio:okio:1.17.4'
+//    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+//    implementation 'com.squareup.okio:okio:1.17.4'
     //阿里fastjson
     implementation 'com.alibaba:fastjson:1.1.72.android'
     //BaseQuickAdapter
@@ -105,5 +105,23 @@ dependencies {
     def room_version="2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    //kotlinMVP
+    implementation 'com.github.cn-ljb:kotlin-mvp-lib:1.2.0'
+
+    //网络请求框架retrofit
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //RxJava
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+
+    //OKHttp
+    api 'com.squareup.okhttp3:okhttp:4.9.3'
+    api 'com.squareup.okio:okio:2.10.0'
+    api 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    api 'com.facebook.stetho:stetho:1.5.0'
+    api 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
 }
