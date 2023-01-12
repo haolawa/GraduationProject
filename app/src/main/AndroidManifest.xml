@@ -21,8 +21,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/home_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/home_logo"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/home_logo"
         android:supportsRtl="true"
         android:theme="@style/MyDesign">
         <activity
@@ -35,10 +35,7 @@
             android:name=".view.Activity.FilmListActivity"
             android:exported="false" />
         <activity
-            android:name=".view.Activity.UnWatchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.Activity.WatchActivity"
+            android:name=".view.Activity.FilmListCommonActivity"
             android:exported="false" />
         <activity
             android:name=".view.Activity.RegisterActivity"

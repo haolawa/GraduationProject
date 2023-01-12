@@ -1,5 +1,6 @@
 package com.example.graduationproject.view.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -41,7 +42,7 @@ import com.yalantis.ucrop.UCrop;
 import java.util.Date;
 
 import butterknife.BindView;
-
+@SuppressLint("NonConstantResourceId")
 public class FilmDetailActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.title_bar)

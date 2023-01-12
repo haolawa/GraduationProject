@@ -12,8 +12,7 @@ import com.example.graduationproject.base.BaseFragment;
 import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.view.Activity.AddFilmActivity;
-import com.example.graduationproject.view.Activity.UnWatchActivity;
-import com.example.graduationproject.view.Activity.WatchActivity;
+import com.example.graduationproject.view.Activity.FilmListCommonActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,11 +60,13 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         Intent intent;
         switch (view.getId()) {
             case R.id.ll_watch:
-                intent = new Intent(getContext(), WatchActivity.class);
+                intent = new Intent(getContext(), FilmListCommonActivity.class);
+                intent.putExtra("title","已看");
                 startActivity(intent);
                 break;
             case R.id.ll_un_watch:
-                intent = new Intent(getContext(), UnWatchActivity.class);
+                intent = new Intent(getContext(), FilmListCommonActivity.class);
+                intent.putExtra("title","未看");
                 startActivity(intent);
                 break;
             case R.id.btn_add:

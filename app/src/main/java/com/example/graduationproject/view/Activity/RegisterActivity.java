@@ -1,5 +1,6 @@
 package com.example.graduationproject.view.Activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,7 @@ import com.example.graduationproject.utils.TitleBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+@SuppressLint("NonConstantResourceId")
 public class RegisterActivity extends AppCompatActivity {
 
     @BindView(R.id.title_bar)

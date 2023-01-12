@@ -15,13 +15,14 @@ import com.example.graduationproject.model.FilmSaveBean;
 import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class WatchActivity extends BaseActivity {
+public class FilmListCommonActivity extends BaseActivity {
     @BindView(R.id.title_bar)
     TitleBar titleBar;
     @BindView(R.id.et_search)
@@ -34,38 +35,31 @@ public class WatchActivity extends BaseActivity {
     SmartRefreshLayout smartRefreshLayout;
     private List<FilmSaveBean> filmBeanList = new ArrayList<>();
     private FilmSaveAdapter adapter;
-
+    private String title;
 
     @Override
-    protected void initData() {
-        ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isWatch);
+    protected void initArgs(Intent intent) {
+        title = intent.getStringExtra("title");
     }
-
 
     @Override
     protected void initView(Bundle bundle) {
-        titleBar.setTitle("已看");
+        titleBar.setTitle(title);
         titleBar.setBackOnclickListener(this);
-        smartRefreshLayout.setOnRefreshListener(refreshLayout -> {
-            // TODO: 2022/11/19
-            //关闭刷新方法
-            //refreshLayout.finishRefresh();
-            // refreshLayout.finishLoadMore();
 
-        });
-        smartRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
-
-        });
+        //关闭刷新方法
+        smartRefreshLayout.setOnRefreshListener(RefreshLayout::finishRefresh);
+        smartRefreshLayout.setOnLoadMoreListener(RefreshLayout::finishLoadMore);
         imgSearch.setOnClickListener(v -> {
-            ThreadUtils.filmSearch(this,etSearch.getText().toString(),filmBeanList,adapter);
+            ThreadUtils.filmSearch(this, etSearch.getText().toString(), filmBeanList, adapter);
         });
 
         initAdapter();
     }
 
     @Override
-    protected void initArgs(Intent intent) {
-
+    protected void initData() {
+        getData();
     }
 
     private void initAdapter() {
@@ -74,21 +68,29 @@ public class WatchActivity extends BaseActivity {
         recycleView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            Intent intent = new Intent(WatchActivity.this, FilmDetailActivity.class);
+            Intent intent = new Intent(FilmListCommonActivity.this, FilmDetailActivity.class);
             intent.putExtra("uid", filmBeanList.get(position).getUid());
             startActivity(intent);
-
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isWatch);
+        getData();
+    }
+
+    private void getData() {
+        if (title.equals("未看")) {
+            ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isUnWatch);
+        } else {
+            ThreadUtils.filmList(getApplicationContext(), filmBeanList, adapter, ThreadUtils.isWatch);
+        }
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.layout_film_list;
     }
+
 }

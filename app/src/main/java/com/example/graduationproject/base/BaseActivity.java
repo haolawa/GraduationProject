@@ -23,8 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.os.EnvironmentCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.graduationproject.R;
+import com.example.graduationproject.utils.Logger;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -107,6 +110,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         System.gc();
     }
 
+    /**
+     * 添加fragment
+     */
+    protected void addFragment(int frameLayoutId, Fragment fragment) {
+        try {
+            if (fragment != null && !isFinishing()) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                if (fragment.isAdded()) {
+                    transaction.show(fragment);
+                } else {
+                    transaction.add(frameLayoutId, fragment);
+                }
+                transaction.commitAllowingStateLoss();
+            }
+        } catch (Exception ignore) {
+            Logger.e(ignore);
+        }
+    }
 
     /**
      * 获取Application
