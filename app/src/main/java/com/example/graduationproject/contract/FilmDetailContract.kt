@@ -17,7 +17,6 @@ interface FilmDetailContract {
         /**
          * 获取电影列表
          */
-        // TODO:  params: ServiceParams? 请求参数
         fun requestFilmListResult(url: String?)
 
     }

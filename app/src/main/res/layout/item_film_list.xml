@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -27,8 +28,8 @@
                 android:layout_width="70dp"
                 android:layout_height="110dp"
                 android:layout_centerVertical="true" />
-<!--                app:failureImage="@drawable/bg_gray_circle"-->
-<!--                app:placeholderImage="@drawable/bg_gray_circle"-->
+            <!--                app:failureImage="@drawable/bg_gray_circle"-->
+            <!--                app:placeholderImage="@drawable/bg_gray_circle"-->
 
 
             <TextView
@@ -37,14 +38,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_toRightOf="@id/img_film"
-                android:text="haolawa"
-                android:maxLines="1"
                 android:ellipsize="end"
                 android:maxWidth="190dp"
+                android:maxLines="1"
+                android:text="haolawa"
                 android:textColor="#ff000000"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_perform"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_film_name"
@@ -54,23 +56,25 @@
                 android:text="导演:"
                 android:textColor="#ff000000"
                 android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tv_perform_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
                 android:layout_below="@id/tv_film_name"
                 android:layout_alignLeft="@id/tv_film_name"
+                android:layout_marginLeft="40dp"
                 android:layout_marginTop="9dp"
                 android:alpha="0.66"
-                android:text=""
-                android:maxLines="1"
                 android:ellipsize="end"
                 android:maxWidth="100dp"
+                android:maxLines="1"
+                android:text=""
                 android:textColor="#ff000000"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tv_film_name"
@@ -84,12 +88,16 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_film_name"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/img_watch"
+                android:layout_toEndOf="@+id/tv_time"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="#ffff3d4c"
-                android:text="时间"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="时间sadsadasdasdasdasdasdasdsdassad" />
 
 
             <ImageView

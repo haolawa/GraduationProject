@@ -2,6 +2,8 @@ package com.example.graduationproject.view.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import com.example.graduationproject.base.BaseActivity;
 import com.example.graduationproject.model.FilmBean;
 import com.example.graduationproject.utils.Constants;
 import com.example.graduationproject.utils.TitleBar;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import java.io.IOException;
@@ -34,6 +37,8 @@ public class FilmListActivity extends BaseActivity {
     RecyclerView recycleView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.spin_kit)
+    SpinKitView spinKitView;
     private FilmListAdapter adapter;
     private String url = Constants.IMDB_SEARCHMOVIE + "/";
 
@@ -57,6 +62,7 @@ public class FilmListActivity extends BaseActivity {
         //关闭刷新和上拉加载
         refreshLayout.setEnableLoadMore(false);
         refreshLayout.setEnableRefresh(false);
+        spinKitView.onWindowFocusChanged(true);
         initAdapter();
     }
 
@@ -68,7 +74,7 @@ public class FilmListActivity extends BaseActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(FilmListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() ->  ToastShow("网络错误"));
             }
 
             @Override
@@ -78,7 +84,11 @@ public class FilmListActivity extends BaseActivity {
                         JSONObject jsonObject = JSON.parseObject(response.body().string());
                         String data = jsonObject.getString("results");
                         List<FilmBean> filmBeans = JSONObject.parseArray(data, FilmBean.class);
-                        runOnUiThread(() -> adapter.setList(filmBeans));
+                        runOnUiThread(() -> {
+                            adapter.setList(filmBeans);
+                            spinKitView.onScreenStateChanged(View.SCREEN_STATE_OFF);
+                            spinKitView.setVisibility(View.GONE);
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -93,7 +103,7 @@ public class FilmListActivity extends BaseActivity {
         recycleView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             Intent intent = new Intent(FilmListActivity.this, AddFilmActivity.class);
-            intent.putExtra("id", ((FilmBean)adapter.getItem(position)).getId());
+            intent.putExtra("id", ((FilmBean) adapter.getItem(position)).getId());
             setResult(RESULT_CODE, intent);
             finish();
         });

@@ -1,5 +1,6 @@
 package com.example.graduationproject.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,11 +26,13 @@ public class FilmListAdapter extends BaseQuickAdapter<FilmBean, BaseViewHolder> 
 
         SimpleDraweeView imgFilm = holder.getView(R.id.img_film);
         TextView tvFilmName = holder.getView(R.id.tv_film_name);
-        TextView tvPerformName = holder.getView(R.id.tv_perform_name);
-//        TextView tvFilmType = holder.getView(R.id.tv_film_type);
+        TextView tvTime = holder.getView(R.id.tv_time);
         ImageView imgCollect = holder.getView(R.id.img_collect);
         ImageView imgWatch = holder.getView(R.id.img_watch);
         TextView tvDate = holder.getView(R.id.tv_date);
+        imgCollect.setVisibility(View.GONE);
+        tvTime.setText("简介");
+        imgWatch.setVisibility(View.GONE);
         if (!StringUtils.isEmpty(bean.getImage())) {
             imgFilm.setImageURI(bean.getImage());
         }
@@ -39,9 +42,6 @@ public class FilmListAdapter extends BaseQuickAdapter<FilmBean, BaseViewHolder> 
         if (!StringUtils.isEmpty(bean.getDescription())) {
             tvDate.setText(bean.getDescription());
         }
-
-
     }
-
 }
 

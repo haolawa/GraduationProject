@@ -124,4 +124,7 @@ dependencies {
     api 'com.facebook.stetho:stetho:1.5.0'
     api 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
+    //Loading
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
 }
