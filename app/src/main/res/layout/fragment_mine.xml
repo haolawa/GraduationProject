@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragment.MineFragment">
 
     <com.example.graduationproject.utils.TitleBar
@@ -11,31 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="40dp" />
     <!-- TODO: Update blank fragment layout -->
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="120dp"
-       android:layout_marginTop="100dp"
-       android:gravity="center"
-       android:orientation="vertical"
-       >
-       <ImageView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:id="@+id/img_avatar"
-           android:src="@mipmap/logo"
+        <ImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/logo" />
 
-           />
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="haolawa"
-           android:id="@+id/tv_username"
-           android:layout_marginTop="10dp"
-           android:textSize="25sp"
-           android:textAlignment="center"
-           />
-   </LinearLayout>
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="haolawa"
+            android:textAlignment="center"
+            android:textSize="25sp" />
+    </LinearLayout>
 
     <com.lihang.ShadowLayout
         android:layout_width="wrap_content"
@@ -58,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="版本更新"
+                android:text="版本"
                 android:textColor="#ff000000"
                 android:textSize="16sp" />
 
@@ -69,7 +66,7 @@
                 android:layout_weight="1"
                 android:alpha="0.66"
                 android:gravity="end"
-                android:text="已经是最新版本"
+                android:text="1.1.0"
                 android:textColor="#ff000000"
                 android:textSize="16sp" />
 
@@ -85,14 +82,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="460dp"
-        >
+        android:gravity="center">
+
         <Button
             android:id="@+id/btn_out_login"
+            style="@style/btn"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            style="@style/btn"
             android:text="退出登录"
 
 

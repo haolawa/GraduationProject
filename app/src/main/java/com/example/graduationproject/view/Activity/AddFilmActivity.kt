@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import android.text.method.ScrollingMovementMethod
 import android.view.Gravity
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,20 +37,16 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
 
     private var isImgWatch = false
     private var isImgLove = false
-    private var isImgWebPower = false
-    private val ratioX = 1.1f
-    private val ratioY = 1.4f
-    private var filmBean = FilmDetailBean()
     private var stampDate: String? = null
     private var path: String? = null
     private lateinit var cameraUtil: CameraUtil
     private lateinit var viewBinding: ActivityAddFilmBinding
-    private val emptyString = ""
     private var presenter: FilmDetailPresenter? = null//presenter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //viewBinding绑定
         viewBinding = ActivityAddFilmBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initData()
@@ -59,7 +54,7 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
 
     fun initData() {
         cameraUtil = CameraUtil(this)
-        viewBinding.apply {
+        viewBinding.run {
             titleBar.setTitle("添加电影")
             titleBar.setBackOnclickListener(this@AddFilmActivity)
             imgWatch.setOnClickListener {
@@ -79,10 +74,11 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
                 }
             }
             imgWebPower.setOnClickListener {
-                if (viewBinding.etFilmName.text.toString() == "") {
+                if (viewBinding.etFilmName.text.equals("")) {
                     ToastShow("请输入要搜索电影名称！")
+                } else {
+                    toFilmListActivity()
                 }
-                toFilmListActivity()
             }
             imgFilm.setOnClickListener {
                 showPopupWindow(it)
@@ -96,11 +92,7 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
                     ToastShow("保存成功！")
                     finish()
                 }
-//                else {
-//                    ToastShow("保存失败！")
-//                }
             }
-
             etFilmName.movementMethod = ScrollingMovementMethod.getInstance()
         }
     }
@@ -141,15 +133,15 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
     }
 
     //改变按钮背景
-    private fun changeImageWatch(img: ImageView?, isSelect: Boolean): Boolean {
-        if (isSelect) {
-            img!!.setBackgroundColor(resources.getColor(R.color.secondary_text))
-            return false
-        } else {
-            img!!.setBackgroundColor(resources.getColor(R.color.teal_200))
-            return true
-        }
-    }
+//    private fun changeImageWatch(img: ImageView?, isSelect: Boolean): Boolean {
+//        if (isSelect) {
+//            img!!.setBackgroundColor(resources.getColor(R.color.secondary_text))
+//            return false
+//        } else {
+//            img!!.setBackgroundColor(resources.getColor(R.color.teal_200))
+//            return true
+//        }
+//    }
 
     private fun toFilmListActivity() {
         val intent = Intent(this, FilmListActivity::class.java)
@@ -158,11 +150,10 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
     }
 
     private fun getData(id: String?) {
-        // TODO: 2022/11/26 MVP
         if (null == presenter) {
             presenter = FilmDetailPresenter(this)
         }
-        presenter!!.requestFilmListResult("${Constants.IMDB_TITLE}/$id")
+        presenter!!.requestFilmDetailResult("${Constants.IMDB_TITLE}/$id")
     }
 
     private fun showPopupWindow(view: View) {
@@ -237,6 +228,8 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == RESULT_CODE) {
             getData(data!!.getStringExtra("id"))//tt11405250
+            viewBinding.spinKit.onWindowFocusChanged(true)
+            viewBinding.spinKit.visibility = View.VISIBLE
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             cameraUtil.startUCrop(cameraUtil.mCameraImagePath, UCrop.REQUEST_CROP, ratioX, ratioY)
         } else if (requestCode == ALBUM_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -271,7 +264,6 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
             }
         } else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val resultUri = UCrop.getOutput(data!!)
-
             Glide.with(this)
                 .load(resultUri)
                 .into(viewBinding.imgFilm);
@@ -282,7 +274,6 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
     }
 
     private fun SaveImage(uri: Uri?) {
-
         //创建一个子线程，将耗时任务在子线程中完成，防止主线程被阻塞
         Thread(Runnable {
             try {
@@ -323,25 +314,22 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
         }).start()
     }
 
-    companion object {
-        private const val REQUEST_CODE = 101
-        private const val RESULT_CODE = 102
-    }
-
     private fun ToastShow(text: String?) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
     override fun handleFilmDetailResult(result: FilmDetailBean) {
         viewBinding.run {
-            etFilmName.setText(result.getTitle() ?: "")
-            path = result.getImage() ?: ""
+            spinKit.onScreenStateChanged(View.SCREEN_STATE_OFF)
+            spinKit.visibility = View.GONE
+            etFilmName.setText(result.title ?: "")
+            path = result.image ?: ""
             imgFilm.setImageURI(path)
-            etFilmStyle.setText(result.getGenres() ?: "")
-            tvFilmTime.setText(result.getReleaseDate()?.toString() ?: "")
-            etDirector.setText(result.getDirectors() ?: "")
-            etPerformer.setText(result.getStars() ?: "")
-            etFilmDetail.setText(result.getPlot() ?: "")
+            etFilmStyle.setText(result.genres ?: "")
+            tvFilmTime.setText(result.releaseDate ?: "")
+            etDirector.setText(result.directors ?: "")
+            etPerformer.setText(result.stars ?: "")
+            etFilmDetail.setText(result.plot ?: "")
         }
     }
 
@@ -351,5 +339,13 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
 
     override fun showToast(text: String?) {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        private const val REQUEST_CODE = 101
+        private const val RESULT_CODE = 102
+        private const val ratioX = 1.1f
+        private const val ratioY = 1.4f
+        private const val emptyString = ""
     }
 }

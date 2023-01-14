@@ -22,7 +22,7 @@ open class FilmDetailPresenter(var view: FilmDetailContract.IView?) :
 
     override fun registerModel() = WebModel::class.java
 
-    override fun requestFilmListResult(url: String?) {
+    override fun requestFilmDetailResult(url: String?) {
         // TODO: Retrofit + RxJava(lambda)使用
         RetrofitManager.getInstance().create(FilmService::class.java)
             .getFilmRequest(url)

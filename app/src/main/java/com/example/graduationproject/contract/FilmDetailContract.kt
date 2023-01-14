@@ -17,7 +17,7 @@ interface FilmDetailContract {
         /**
          * 获取电影列表
          */
-        fun requestFilmListResult(url: String?)
+        fun requestFilmDetailResult(url: String?)
 
     }
 
