@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import mvp.ljb.kt.presenter.BaseMvpPresenter
 
 /**
- * @Author Kotlin MVP Plugin
+ * @Author luowen
  * @Date 2022/12/02
  * @Description input description
  **/

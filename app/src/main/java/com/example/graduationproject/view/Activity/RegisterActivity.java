@@ -1,6 +1,7 @@
 package com.example.graduationproject.view.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.graduationproject.R;
 import com.example.graduationproject.utils.TitleBar;
+import com.example.graduationproject.utils.ValidatorUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,8 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etUsername;
     @BindView(R.id.et_password)
     EditText etPassword;
-    @BindView(R.id.et_password2)
-    EditText etPassword2;
+//    @BindView(R.id.et_password2)
+//    EditText etPassword2;
     @BindView(R.id.btn_register)
     Button btnRegister;
 
@@ -45,21 +48,21 @@ public class RegisterActivity extends AppCompatActivity {
     private  void initView(){
         titleBar.setBackOnclickListener(this);
         titleBar.setTitle("注册");
+        btnRegister.setOnClickListener(v -> inputRoom());
     }
 
-    @OnClick({R.id.et_username, R.id.et_password, R.id.et_password2, R.id.btn_register})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.et_username:
-                break;
-            case R.id.et_password:
-                break;
-            case R.id.et_password2:
-                break;
-            case R.id.btn_register:
-                break;
-            default:
-                break;
+    private void inputRoom() {
+        if (etUsername.getText() == null || etUsername.getText().length() != 11 || !ValidatorUtils.isMobile(etUsername.getText().toString())) {
+            ToastUtils.showShort("请输入正确手机号");
+            return;
         }
+        if (etPassword.getText() == null || !ValidatorUtils.isPassword(etPassword.getText().toString())) {
+            ToastUtils.showShort("密码由字母和数字组成（6-12位）");
+            return;
+        }
+        // TODO: 2023/1/15 数据库
+
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
     }
 }

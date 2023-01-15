@@ -24,6 +24,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
+/**
+ * @author luowen
+ */
 public class MineFragment extends BaseFragment {
 
     @BindView(R.id.title_bar)

@@ -7,9 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.graduationproject.R;
 import com.example.graduationproject.utils.TitleBar;
 
@@ -44,26 +46,22 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView(){
         titleBar.setTitle("登录");
+        btnLogin.setOnClickListener(v -> toLogin());
+        btnReg.setOnClickListener(v -> toRegistered());
     }
 
-    @OnClick({R.id.et_username, R.id.et_password, R.id.btn_login, R.id.btn_reg})
-    public void onClick(View view) {
-        Intent intent;
-        switch (view.getId()) {
-            case R.id.et_username:
-                break;
-            case R.id.et_password:
-                break;
-            case R.id.btn_login:
-                intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.btn_reg:
-                intent = new Intent(this,RegisterActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
+    private void toLogin() {
+        if (etUsername.getText() == null || etUsername.getText().length() != 11) {
+            ToastUtils.showShort("手机号或密码错误");
+            return;
         }
+        // TODO: 2023/1/15 数据库
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void toRegistered() {
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
     }
 }

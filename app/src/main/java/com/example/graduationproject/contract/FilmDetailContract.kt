@@ -7,7 +7,7 @@ import mvp.ljb.kt.contract.IPresenterContract
 import mvp.ljb.kt.contract.IViewContract
 
 /**
- * @Author Kotlin MVP Plugin
+ * @Author luowen
  * @Date 2022/12/02
  * @Description input description
  **/
