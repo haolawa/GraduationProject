@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.graduationproject.R;
+import com.example.graduationproject.model.UserData;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 import com.example.graduationproject.utils.ValidatorUtils;
 
@@ -61,7 +63,10 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         // TODO: 2023/1/15 数据库
-
+        UserData userData = new UserData();
+        userData.setPhone(etUsername.getText().toString());
+        userData.setPassword(etPassword.getText().toString());
+        ThreadUtils.insertUserData(this,userData);
         Intent intent = new Intent(this,LoginActivity.class);
         startActivity(intent);
     }

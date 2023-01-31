@@ -2,15 +2,21 @@ package com.example.graduationproject.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import lombok.Data;
-import lombok.NonNull;
 import lombok.ToString;
 
+/**
+ * @author luowen
+ */
 @Data
 @ToString
-@Entity
+@Entity(foreignKeys = @ForeignKey(
+        entity = UserData.class,
+        parentColumns = "phone",
+        childColumns = "uid"))
 public class FilmSaveBean {
     @PrimaryKey(autoGenerate = true)
     private int uid;

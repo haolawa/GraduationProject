@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.graduationproject.R;
+import com.example.graduationproject.controller.SPUtils;
+import com.example.graduationproject.model.UserData;
+import com.example.graduationproject.utils.ThreadUtils;
 import com.example.graduationproject.utils.TitleBar;
 
 import butterknife.BindView;
@@ -44,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         titleBar.setTitle("登录");
         btnLogin.setOnClickListener(v -> toLogin());
         btnReg.setOnClickListener(v -> toRegistered());
@@ -52,16 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void toLogin() {
         if (etUsername.getText() == null || etUsername.getText().length() != 11) {
-            ToastUtils.showShort("手机号或密码错误");
+            ToastUtils.showShort("手机号错误");
             return;
         }
-        // TODO: 2023/1/15 数据库
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        ThreadUtils.getUserData(this, etUsername.getText().toString(),etPassword.getText().toString());
     }
 
     private void toRegistered() {
-        Intent intent = new Intent(this,RegisterActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 }

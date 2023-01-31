@@ -1,6 +1,9 @@
 package com.example.graduationproject.utils;
 
+import static com.blankj.utilcode.util.ActivityUtils.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
@@ -8,10 +11,15 @@ import android.widget.TextView;
 import androidx.room.Room;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.graduationproject.adapter.FilmSaveAdapter;
 import com.example.graduationproject.controller.AppDatabase;
 import com.example.graduationproject.controller.FilmDao;
+import com.example.graduationproject.controller.SPUtils;
+import com.example.graduationproject.controller.UserDao;
 import com.example.graduationproject.model.FilmSaveBean;
+import com.example.graduationproject.model.UserData;
+import com.example.graduationproject.view.Activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author luowen
@@ -105,7 +114,7 @@ public class ThreadUtils {
         });
     }
 
-    public static void insertData(Context context, FilmSaveBean filmBean) {
+    public static void insertFilmData(Context context, FilmSaveBean filmBean) {
         FilmDao filmDao = getFilmDao(context);
         threadPool.execute(() -> {
             filmDao.insertData(filmBean);
@@ -121,8 +130,47 @@ public class ThreadUtils {
 
     private static FilmDao getFilmDao(Context context) {
         //AppDatabase db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME).build();
+        //添加一个addMigration或者调用fallbackToDestructiveMigration完成迁移
         return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME)
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build()
                 .filmDao();
+    }
+
+    private static UserDao getUserDao(Context context) {
+        //AppDatabase db = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME).build();
+        return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DBNAME)
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build()
+                .userDao();
+    }
+
+    /*
+     * 用户数据
+     */
+    public static void insertUserData(Context context, UserData userData) {
+        UserDao userDao = getUserDao(context);
+        threadPool.execute(() -> {
+            userDao.insertData(userData);
+        });
+    }
+
+    public static void getUserData(Context context, String phone,String password) {
+        UserDao userDao = getUserDao(context);
+        threadPool.execute(() -> {
+            UserData userData = userDao.getUserData(phone);
+            if(null == userData){
+                ToastUtils.showShort("该手机号未注册");
+                return;
+            }
+            if(!userData.getPassword().equals(password)){
+                ToastUtils.showShort("密码错误");
+                return;
+            }
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+        });
     }
 }

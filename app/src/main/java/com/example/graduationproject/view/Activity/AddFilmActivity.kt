@@ -129,7 +129,7 @@ class AddFilmActivity : AppCompatActivity(), FilmDetailContract.IView {
         filmSaveBean.setFilmType(viewBinding.etFilmStyle.text.toString())
         filmSaveBean.setLove(isImgLove)
         filmSaveBean.setWatch(isImgWatch)
-        ThreadUtils.insertData(this, filmSaveBean)
+        ThreadUtils.insertFilmData(this, filmSaveBean)
     }
 
     //改变按钮背景

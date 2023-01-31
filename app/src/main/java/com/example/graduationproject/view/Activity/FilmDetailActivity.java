@@ -42,6 +42,7 @@ import com.yalantis.ucrop.UCrop;
 import java.util.Date;
 
 import butterknife.BindView;
+
 @SuppressLint("NonConstantResourceId")
 public class FilmDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -97,7 +98,10 @@ public class FilmDetailActivity extends BaseActivity implements View.OnClickList
     protected void initData() {
         uid = getIntent().getIntExtra("uid", 0);
         new Thread(() -> {
-            AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "myfilm.db").build();
+            AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "myfilm.db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
             FilmDao filmDao = db.filmDao();
             filmBean = filmDao.getIdDetail(uid);
 
